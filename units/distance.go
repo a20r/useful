@@ -1,6 +1,11 @@
 package units
 
-import "golang.org/x/exp/constraints"
+import (
+	"fmt"
+
+	"github.com/a20r/falta"
+	"golang.org/x/exp/constraints"
+)
 
 // Distance is a nanometers representation of distance
 type Distance int64
@@ -13,6 +18,30 @@ const (
 	Yard      Distance = 9.144e+8
 	Mile      Distance = 1.609e+12
 )
+
+var unitNames = map[string]Distance{
+	"nm":         Nanometer,
+	"nanometer":  Nanometer,
+	"nanometers": Nanometer,
+	"m":          Meter,
+	"meter":      Meter,
+	"meters":     Meter,
+	"km":         Kilometer,
+	"kilometer":  Kilometer,
+	"kilometers": Kilometer,
+	"ft":         Foot,
+	"foot":       Foot,
+	"feet":       Foot,
+	"yd":         Yard,
+	"yard":       Yard,
+	"yards":      Yard,
+	"mi":         Mile,
+	"mile":       Mile,
+	"miles":      Mile,
+}
+
+// ErrUnsupportedUnit is returned when the unit is not supported
+var ErrUnsupportedUnit = falta.Newf(`units: unit "%s" is not supported`)
 
 // MultDistance is a generic function that let's you multiply a distance by a number
 func MultDistance[T constraints.Float | constraints.Integer](d Distance, coeff T) Distance {
@@ -78,4 +107,38 @@ func (d Distance) Yards() float64 {
 // Miles converts the distance from nanometers to miles
 func (d Distance) Miles() float64 {
 	return float64(d) / float64(Mile)
+}
+
+// String returns a nicely formatted distance string w/ standard units
+func (d Distance) String() string {
+	switch {
+	case d.Kilometers() >= 1:
+		return fmt.Sprintf("%fkm", d.Kilometers())
+	default:
+		return fmt.Sprintf("%fm", d.Meters())
+	}
+}
+
+// MarshalJSON marshals the distance into a JSON string
+func (d Distance) MarshalJSON() ([]byte, error) {
+	return []byte(d.String()), nil
+}
+
+// UnmarshalJSON unmarshals the distance from a JSON string
+func (d *Distance) UnmarshalJSON(data []byte) error {
+	var dist float64
+	var unit string
+
+	if _, err := fmt.Scanf("%f%s", &dist, &unit); err != nil {
+		return err
+	}
+
+	coeff, ok := unitNames[unit]
+
+	if !ok {
+		return ErrUnsupportedUnit.New(unit)
+	}
+
+	*d = MultDistance(coeff, dist)
+	return nil
 }
