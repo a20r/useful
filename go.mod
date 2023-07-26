@@ -3,7 +3,7 @@ module github.com/a20r/useful
 go 1.18
 
 require (
-	github.com/a20r/falta v0.0.2
+	github.com/a20r/falta v0.1.1
 	github.com/a20r/mesa v0.5.2
 	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
 )
@@ -11,6 +11,7 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
