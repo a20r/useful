@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/a20r/falta"
-	"golang.org/x/exp/constraints"
+	"github.com/a20r/useful/generics"
 )
 
 // Distance is a nanometers representation of distance
@@ -44,37 +44,37 @@ var unitNames = map[string]Distance{
 var ErrUnsupportedUnit = falta.Newf(`units: unit "%s" is not supported`)
 
 // MultDistance is a generic function that let's you multiply a distance by a number
-func MultDistance[T constraints.Float | constraints.Integer](d Distance, coeff T) Distance {
+func MultDistance[T generics.Number](d Distance, coeff T) Distance {
 	return Distance(float64(d) * float64(coeff))
 }
 
 // Nanometers converts a number of nanometers into a Distance
-func Nanometers[T constraints.Float | constraints.Integer](d T) Distance {
+func Nanometers[T generics.Number](d T) Distance {
 	return Distance(d) * Nanometer
 }
 
 // Meters converts a number of meters into a Distance
-func Meters[T constraints.Float | constraints.Integer](d T) Distance {
+func Meters[T generics.Number](d T) Distance {
 	return Distance(d) * Meter
 }
 
 // Kilometers converts a number of kilometers into a Distance
-func Kilometers[T constraints.Float | constraints.Integer](d T) Distance {
+func Kilometers[T generics.Number](d T) Distance {
 	return Distance(d) * Kilometer
 }
 
 // Feet converts a number of feet into a Distance
-func Feet[T constraints.Float | constraints.Integer](d T) Distance {
+func Feet[T generics.Number](d T) Distance {
 	return Distance(d) * Foot
 }
 
 // Yards converts a number of yards into a Distance
-func Yards[T constraints.Float | constraints.Integer](d T) Distance {
+func Yards[T generics.Number](d T) Distance {
 	return Distance(d) * Yard
 }
 
 // Miles converts a number of miles into a Distance
-func Miles[T constraints.Float | constraints.Integer](d T) Distance {
+func Miles[T generics.Number](d T) Distance {
 	return Distance(d) * Mile
 }
 

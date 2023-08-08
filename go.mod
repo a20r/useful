@@ -3,9 +3,8 @@ module github.com/a20r/useful
 go 1.18
 
 require (
-	github.com/a20r/falta v0.1.1
-	github.com/a20r/mesa v0.5.2
-	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
+	github.com/a20r/falta v0.1.2
+	github.com/a20r/mesa v0.6.0
 )
 
 require (
