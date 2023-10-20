@@ -3,8 +3,8 @@ module github.com/a20r/useful
 go 1.18
 
 require (
-	github.com/a20r/falta v0.1.2
-	github.com/a20r/mesa v0.6.0
+	github.com/a20r/falta v0.3.2
+	github.com/a20r/mesa v0.10.3
 )
 
 require golang.org/x/sys v0.13.0 // indirect

@@ -1,6 +1,8 @@
 package assert
 
 import (
+	"errors"
+
 	"github.com/a20r/falta"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/constraints"
@@ -82,7 +84,7 @@ func Handle(err *error, l ...*logrus.Entry) {
 		errRecovered, ok := r.(error)
 
 		// It's not an panic made by us
-		if !ok {
+		if !ok || !errors.Is(errRecovered, ErrAssertionFailed) {
 			panic(r)
 		}
 
