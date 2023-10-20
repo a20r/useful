@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/a20r/useful/assert"
+	"github.com/sirupsen/logrus"
 )
 
 func TestAssertions(t *testing.T) {
@@ -52,9 +53,9 @@ func TestAssertions(t *testing.T) {
 	fmt.Println(dot([]float64{8}, []float64{8, 4, 2}))
 
 	printName := func(m map[string]string) (err error) {
-		defer assert.Handle(&err)
+		defer assert.Handle(&err, logrus.WithField("func", "printName"))
 		assert.HasKeys(m, "firstName", "lastName")
-		fmt.Printf("%s, %s", m["lastName"], m["firstName"])
+		fmt.Printf("%s, %s\n", m["lastName"], m["firstName"])
 		return
 	}
 
@@ -63,4 +64,15 @@ func TestAssertions(t *testing.T) {
 	fmt.Println(printName(map[string]string{"lastName": "Wallar"}))
 	fmt.Println(printName(map[string]string{"whatever": "yo"}))
 	fmt.Println(printName(map[string]string{}))
+
+	div := func(l ...float64) (v float64, err error) {
+		defer assert.Handle(&err)
+		defer assert.NoPanic(&err)
+		assert.NotZero(l[1])
+		return l[0] / l[1], nil
+	}
+
+	fmt.Println(div(1))
+	fmt.Println(div(1, 0))
+	fmt.Println(div(1, 2))
 }

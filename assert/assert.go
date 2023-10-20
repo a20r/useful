@@ -2,6 +2,7 @@ package assert
 
 import (
 	"github.com/a20r/falta"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/constraints"
 )
 
@@ -15,6 +16,7 @@ var (
 	ErrSlicesAreDifferentSizes = falta.Newf("slices are different sizes: %v != %v")
 	ErrFuncReturnedError       = falta.Newf("<%T> no error expected")
 	ErrKeyNotInMap             = falta.Newf(`keys not in map: %v not in <%T>`)
+	ErrPanic                   = falta.Newf("panic: %s")
 )
 
 func NotNil[T any](val *T) {
@@ -37,7 +39,7 @@ func NotNegative[T constraints.Integer | constraints.Float](val T) {
 
 func NotZero[T constraints.Integer | constraints.Float](val T) {
 	if val == 0 {
-		panic(ErrAssertionFailed.New("NotZero").Wrap(ErrValueIsZero.New(val)))
+		panic(ErrAssertionFailed.New("NotZero").Wrap(ErrValueIsZero.New()))
 	}
 }
 
@@ -75,9 +77,25 @@ func SameSize[T any](a, b []T) {
 	}
 }
 
-func Handle(err *error) {
+func Handle(err *error, l ...*logrus.Entry) {
 	if r := recover(); r != nil {
-		errRecovered := r.(error)
+		errRecovered, ok := r.(error)
+
+		// It's not an panic made by us
+		if !ok {
+			panic(r)
+		}
+
+		if len(l) > 0 {
+			l[0].Errorf("Assertion failed: %v", errRecovered)
+		}
+
 		*err = errRecovered
+	}
+}
+
+func NoPanic(err *error) {
+	if r := recover(); r != nil {
+		*err = ErrAssertionFailed.New("NoPanic").Wrap(ErrPanic.New(r))
 	}
 }
