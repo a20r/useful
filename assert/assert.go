@@ -98,6 +98,10 @@ func Handle(err *error, l ...*logrus.Entry) {
 
 func CatchPanic(err *error) {
 	if r := recover(); r != nil {
+		if e, ok := r.(error); ok && errors.Is(e, ErrAssertionFailed) {
+			panic(e)
+		}
+
 		*err = ErrAssertionFailed.New("NoPanic").Wrap(ErrPanic.New(r))
 	}
 }

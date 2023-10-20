@@ -7,10 +7,11 @@ import (
 	"testing"
 
 	"github.com/a20r/useful/assert"
-	"github.com/sirupsen/logrus"
+	tfassert "github.com/stretchr/testify/assert"
 )
 
 func TestAssertions(t *testing.T) {
+	as := tfassert.New(t)
 	sum := func(in []int) (total int, err error) {
 		defer assert.Handle(&err)
 		assert.NotEmpty(in)
@@ -23,10 +24,17 @@ func TestAssertions(t *testing.T) {
 		return total, nil
 	}
 
-	fmt.Println(sum(nil))
-	fmt.Println(sum([]int{42, 1, 2, -1}))
-	fmt.Println(sum([]int{0, 1, 2}))
-	fmt.Println(sum([]int{3, 1, 2}))
+	_, err := sum(nil)
+	as.ErrorIs(err, assert.ErrContainerIsEmpty)
+
+	_, err = sum([]int{42, 1, 2, -1})
+	as.ErrorIs(err, assert.ErrValueIsNotPositive)
+
+	_, err = sum([]int{0, 1, 2})
+	as.ErrorIs(err, assert.ErrValueIsNotPositive)
+
+	_, err = sum([]int{3, 1, 2})
+	as.NoError(err)
 
 	readAll := func(fname string) (contents []byte, err error) {
 		defer assert.Handle(&err)
@@ -35,7 +43,8 @@ func TestAssertions(t *testing.T) {
 		return
 	}
 
-	fmt.Println(readAll("does-not-exist.txt"))
+	_, err = readAll("does-not-exist.txt")
+	as.ErrorIs(err, assert.ErrFuncReturnedError)
 
 	dot := func(a, b []float64) (product float64, err error) {
 		defer assert.Handle(&err)
@@ -48,22 +57,35 @@ func TestAssertions(t *testing.T) {
 		return
 	}
 
-	fmt.Println(dot([]float64{2, 4, 8}, []float64{8, 4, 2}))
-	fmt.Println(dot([]float64{2, 4, 8}, []float64{8, 4}))
-	fmt.Println(dot([]float64{8}, []float64{8, 4, 2}))
+	_, err = dot([]float64{2, 4, 8}, []float64{8, 4, 2})
+	as.NoError(err)
 
-	printName := func(m map[string]string) (err error) {
-		defer assert.Handle(&err, logrus.WithField("func", "printName"))
+	_, err = dot([]float64{2, 4, 8}, []float64{8, 4})
+	as.ErrorIs(err, assert.ErrSlicesAreDifferentSizes)
+
+	_, err = dot([]float64{8}, []float64{8, 4, 2})
+	as.ErrorIs(err, assert.ErrSlicesAreDifferentSizes)
+
+	formatName := func(m map[string]string) (name string, err error) {
+		defer assert.Handle(&err)
 		assert.HasKeys(m, "firstName", "lastName")
-		fmt.Printf("%s, %s\n", m["lastName"], m["firstName"])
-		return
+		return fmt.Sprintf("%s, %s\n", m["lastName"], m["firstName"]), nil
 	}
 
-	fmt.Println(printName(map[string]string{"firstName": "Alex", "lastName": "Wallar"}))
-	fmt.Println(printName(map[string]string{"firstName": "Alan"}))
-	fmt.Println(printName(map[string]string{"lastName": "Wallar"}))
-	fmt.Println(printName(map[string]string{"whatever": "yo"}))
-	fmt.Println(printName(map[string]string{}))
+	_, err = formatName(map[string]string{"firstName": "Alex", "lastName": "Wallar"})
+	as.NoError(err)
+
+	_, err = formatName(map[string]string{"firstName": "Alan"})
+	as.ErrorIs(err, assert.ErrKeyNotInMap)
+
+	_, err = formatName(map[string]string{"lastName": "Wallar"})
+	as.ErrorIs(err, assert.ErrKeyNotInMap)
+
+	_, err = formatName(map[string]string{"whatever": "yo"})
+	as.ErrorIs(err, assert.ErrKeyNotInMap)
+
+	_, err = formatName(map[string]string{})
+	as.ErrorIs(err, assert.ErrKeyNotInMap)
 
 	div := func(l ...float64) (v float64, err error) {
 		defer assert.Handle(&err)
@@ -72,7 +94,12 @@ func TestAssertions(t *testing.T) {
 		return l[0] / l[1], nil
 	}
 
-	fmt.Println(div(1))
-	fmt.Println(div(1, 0))
-	fmt.Println(div(1, 2))
+	_, err = div(1)
+	as.ErrorIs(err, assert.ErrPanic)
+
+	_, err = div(1, 0)
+	as.ErrorIs(err, assert.ErrValueIsZero)
+
+	_, err = div(1, 2)
+	as.NoError(err)
 }
