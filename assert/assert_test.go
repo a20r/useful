@@ -67,7 +67,7 @@ func TestAssertions(t *testing.T) {
 
 	div := func(l ...float64) (v float64, err error) {
 		defer assert.Handle(&err)
-		defer assert.NoPanic(&err)
+		defer assert.CatchPanic(&err)
 		assert.NotZero(l[1])
 		return l[0] / l[1], nil
 	}

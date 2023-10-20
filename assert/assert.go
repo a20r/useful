@@ -96,7 +96,7 @@ func Handle(err *error, l ...*logrus.Entry) {
 	}
 }
 
-func NoPanic(err *error) {
+func CatchPanic(err *error) {
 	if r := recover(); r != nil {
 		*err = ErrAssertionFailed.New("NoPanic").Wrap(ErrPanic.New(r))
 	}
