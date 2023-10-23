@@ -12,8 +12,9 @@ import (
 )
 
 func TestAssertions(t *testing.T) {
-	logrus.StandardLogger().ExitFunc = nil
-
+	logrus.StandardLogger().ExitFunc = func(i int) {
+		t.Logf("Logrus handled exit code %d", i)
+	}
 	t.Run("NotEmpty and Positive", func(t *testing.T) {
 		as := tfassert.New(t)
 		sum := func(in []int) (total int, err error) {
@@ -41,12 +42,12 @@ func TestAssertions(t *testing.T) {
 		as.NoError(err)
 	})
 
-	t.Run("NoError", func(t *testing.T) {
+	t.Run("Success", func(t *testing.T) {
 		as := tfassert.New(t)
 		readAll := func(fname string) (contents []byte, err error) {
 			defer assert.Handle(&err)
-			f := assert.NoError(os.Open(fname))
-			contents = assert.NoError(io.ReadAll(f))
+			f := assert.Success(os.Open(fname))
+			contents = assert.Success(io.ReadAll(f))
 			return
 		}
 

@@ -15,6 +15,7 @@ var (
 	ErrValueIsNegative         = falta.Newf("%v < 0")
 	ErrValueIsNotPositive      = falta.Newf("%v <= 0")
 	ErrValueIsZero             = falta.Newf("value == 0")
+	ErrErrorIsNotNil           = falta.Newf("err is not nil")
 	ErrSlicesAreDifferentSizes = falta.Newf("slices are different sizes: %v != %v")
 	ErrFuncReturnedError       = falta.Newf("<%T> no error expected")
 	ErrKeyNotInMap             = falta.Newf(`keys not in map: %v not in <%T>`)
@@ -51,9 +52,17 @@ func Positive[T constraints.Integer | constraints.Float](val T) {
 	}
 }
 
+func Success[T any](val T, err error) T {
+	if err != nil {
+		panic(ErrAssertionFailed.New("Success").Wrap(ErrFuncReturnedError.New(err).Wrap(err)))
+	}
+
+	return val
+}
+
 func NoError[T any](val T, err error) T {
 	if err != nil {
-		panic(ErrAssertionFailed.New("NoError").Wrap(ErrFuncReturnedError.New(err).Wrap(err)))
+		panic(ErrAssertionFailed.New("NoError").Wrap(ErrErrorIsNotNil.New()))
 	}
 
 	return val
