@@ -60,12 +60,10 @@ func Success[T any](val T, err error) T {
 	return val
 }
 
-func NoError[T any](val T, err error) T {
+func NoError(err error) {
 	if err != nil {
 		panic(ErrAssertionFailed.New("NoError").Wrap(ErrErrorIsNotNil.New()))
 	}
-
-	return val
 }
 
 func HasKeys[K comparable, V any, M ~map[K]V](m M, ks ...K) {
