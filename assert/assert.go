@@ -80,7 +80,7 @@ func HasKeys[K comparable, V any, M ~map[K]V](m M, ks ...K) {
 	}
 }
 
-func SameSize[T any](a, b []T) {
+func SameSize[T, U any](a []T, b []U) {
 	if len(a) != len(b) {
 		panic(ErrAssertionFailed.New("SameSize").Wrap(ErrSlicesAreDifferentSizes.New(len(a), len(b))))
 	}
