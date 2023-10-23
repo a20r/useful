@@ -89,10 +89,30 @@ func Handle(err *error, l ...*logrus.Entry) {
 		}
 
 		if len(l) > 0 {
-			l[0].Errorf("Assertion failed: %v", errRecovered)
+			l[0].WithError(errRecovered).Errorf("Assertion failed: %v", errRecovered)
 		}
 
 		*err = errRecovered
+	}
+}
+
+func FatalOnError(err *error, l ...*logrus.Entry) {
+	if r := recover(); r != nil {
+		errRecovered, ok := r.(error)
+
+		// It's not an panic made by us
+		if !ok || !errors.Is(errRecovered, ErrAssertionFailed) {
+			panic(r)
+		}
+
+		*err = errRecovered
+		log := logrus.WithField("func", "a20r/useful/assert.FatalOnError")
+
+		if len(l) > 0 {
+			log = l[0]
+		}
+
+		log.WithError(*err).Fatalf("[assert] Assertion failed: %v", *err)
 	}
 }
 
