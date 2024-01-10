@@ -2,6 +2,7 @@ package units
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/a20r/falta"
 	"github.com/a20r/useful/generics"
@@ -19,7 +20,7 @@ const (
 	Mile      Distance = 1.609e+12
 )
 
-var unitNames = map[string]Distance{
+var distanceUnitNames = map[string]Distance{
 	"nm":         Nanometer,
 	"nanometer":  Nanometer,
 	"nanometers": Nanometer,
@@ -50,32 +51,32 @@ func MultDistance[T generics.Number](d Distance, coeff T) Distance {
 
 // Nanometers converts a number of nanometers into a Distance
 func Nanometers[T generics.Number](d T) Distance {
-	return Distance(d) * Nanometer
+	return MultDistance(Nanometer, d)
 }
 
 // Meters converts a number of meters into a Distance
 func Meters[T generics.Number](d T) Distance {
-	return Distance(d) * Meter
+	return MultDistance(Meter, d)
 }
 
 // Kilometers converts a number of kilometers into a Distance
 func Kilometers[T generics.Number](d T) Distance {
-	return Distance(d) * Kilometer
+	return MultDistance(Kilometer, d)
 }
 
 // Feet converts a number of feet into a Distance
 func Feet[T generics.Number](d T) Distance {
-	return Distance(d) * Foot
+	return MultDistance(Foot, d)
 }
 
 // Yards converts a number of yards into a Distance
 func Yards[T generics.Number](d T) Distance {
-	return Distance(d) * Yard
+	return MultDistance(Yard, d)
 }
 
 // Miles converts a number of miles into a Distance
 func Miles[T generics.Number](d T) Distance {
-	return Distance(d) * Mile
+	return MultDistance(Mile, d)
 }
 
 // Nanometers converts the distance to nanometers. It just returns the distance
@@ -109,6 +110,11 @@ func (d Distance) Miles() float64 {
 	return float64(d) / float64(Mile)
 }
 
+func (d Distance) Per(dur Duration) Speed {
+	hours := float64(dur.Nanoseconds()) / float64(time.Hour)
+	return Kph(d.Kilometers() / hours)
+}
+
 // String returns a nicely formatted distance string w/ standard units
 func (d Distance) String() string {
 	switch {
@@ -129,11 +135,11 @@ func (d *Distance) UnmarshalJSON(data []byte) error {
 	var dist float64
 	var unit string
 
-	if _, err := fmt.Scanf("%f%s", &dist, &unit); err != nil {
+	if _, err := fmt.Sscanf(string(data), "%f%s", &dist, &unit); err != nil {
 		return err
 	}
 
-	coeff, ok := unitNames[unit]
+	coeff, ok := distanceUnitNames[unit]
 
 	if !ok {
 		return ErrUnsupportedUnit.New(unit)

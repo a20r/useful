@@ -1,9 +1,5 @@
-github.com/a20r/falta v0.1.2 h1:2R2YgEOcmXc4oE6Qyn8NxxL8S/+5VqZ0SlPAYtsbLYE=
-github.com/a20r/falta v0.1.2/go.mod h1:0CMHCoPHcXVYHwjeYBbm0f2y/nfRiQ0aLZ8iUXv+iYY=
-github.com/a20r/falta v0.3.2 h1:UU62zh+x8+lHf1c/lN+UHA9jknB6kWhQXlKb8yAfvMs=
-github.com/a20r/falta v0.3.2/go.mod h1:0CMHCoPHcXVYHwjeYBbm0f2y/nfRiQ0aLZ8iUXv+iYY=
-github.com/a20r/mesa v0.6.0 h1:VSqjPEF6nu3rOb6g8Pq6coQEZoYx3UeGrnK8XY7kkdg=
-github.com/a20r/mesa v0.6.0/go.mod h1:22mOWIJzkgV5Qe7r0bMzF5XNoblVgVCmkB6gudB+Wbs=
+github.com/a20r/falta v0.4.0 h1:Ew2gToMjJjSyZh/QY6pUF3fi/3obYpCYU8KU26Ld7s8=
+github.com/a20r/falta v0.4.0/go.mod h1:0CMHCoPHcXVYHwjeYBbm0f2y/nfRiQ0aLZ8iUXv+iYY=
 github.com/a20r/mesa v0.10.3 h1:JeOGWybfQSpHTpcTZMOa6Q7NPA2qrrne63J1mM//Nmw=
 github.com/a20r/mesa v0.10.3/go.mod h1:22mOWIJzkgV5Qe7r0bMzF5XNoblVgVCmkB6gudB+Wbs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -17,11 +13,11 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-golang.org/x/exp v0.0.0-20231006140011-7918f672742d h1:jtJma62tbqLibJ5sFQz8bKtEM8rJBtfilJ2qTU199MI=
-golang.org/x/exp v0.0.0-20231006140011-7918f672742d/go.mod h1:ldy0pHrwJyGW56pPQzzkH36rKxoZW1tw7ZJpeKx+hdo=
+golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa h1:FRnLl4eNAQl8hwxVVC17teOw8kdjVDVAiFMtgUdTSRQ=
+golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa/go.mod h1:zk2irFbV9DP96SEBUUAy67IdHUaZuSnrz1n472HUCLE=
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.13.0 h1:Af8nKPmuFypiUBjVoU9V20FiaFXOcuZI21p0ycVYYGE=
-golang.org/x/sys v0.13.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.14.0 h1:Vz7Qs629MkJkGyHxUlRHizWJRG2j8fbQKjELVSNhy7Q=
+golang.org/x/sys v0.14.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
