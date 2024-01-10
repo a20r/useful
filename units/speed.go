@@ -66,6 +66,10 @@ func (s Speed) Distance(dur Duration) Distance {
 	return Distance(s.NmPerSec() * secs)
 }
 
+func (s Speed) Duration(dist Distance) time.Duration {
+	return time.Duration(float64(time.Hour) * dist.Kilometers() / s.Kph())
+}
+
 func (s Speed) NmPerSec() float64 {
 	return float64(s) / float64(NanometersPerSecond)
 }
