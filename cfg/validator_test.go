@@ -1,7 +1,9 @@
 package cfg_test
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/a20r/mesa"
 	"github.com/a20r/useful/cfg"
@@ -110,8 +112,44 @@ func TestCfg_Validate(t *testing.T) {
 					ctx.As.NoError(out)
 				},
 			},
+			{
+				Name: "Self validation succeeds",
+
+				Input: selfValidationStruct{
+					Secs: 420,
+				},
+
+				Check: func(ctx *mesa.Ctx, in any, out error) {
+					ctx.As.NoError(out)
+				},
+			},
+			{
+				Name: "Self validation fails",
+
+				Input: selfValidationStruct{
+					Secs: -1,
+				},
+
+				Check: func(ctx *mesa.Ctx, in any, out error) {
+					expected := fmt.Errorf("Time field cannot be zero")
+					ctx.As.Error(out)
+					ctx.As.ErrorIs(out, cfg.ErrCfgSelfValidationFailed.New().Wrap(expected))
+				},
+			},
 		},
 	}
 
 	table.Run(t)
+}
+
+type selfValidationStruct struct {
+	Secs time.Duration `cfg:"required"`
+}
+
+func (s selfValidationStruct) Validate() error {
+	if s.Secs < 0 {
+		return fmt.Errorf("Time field cannot be zero")
+	}
+
+	return nil
 }
